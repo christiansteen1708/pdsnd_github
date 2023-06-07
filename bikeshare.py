@@ -14,33 +14,36 @@ city_data = {'chicago': 'chicago.csv',
              'newyork': 'new_york_city.csv',
              'washington': 'washington.csv'}
 months = {'january': 1, 'february': 2, 'march': 3,
-          'april': 4, 'may': 5, 'june': 6, 'all': 99}
+          'april': 4, 'may': 5, 'june': 6, 'all': 99, 'a': 99}
 days = {'monday': 0, 'tuesday': 1, 'wednesday': 2,
         'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6, 'all': 99, 'a': 99}
 yes_no = {'no': False, 'yes': True, 'y': True, 'n': False}
 
 
-def get_input(reference_dict):
+def get_input(prompt, reference_dict):
     """
     takes input from user and returns value from dictionary
 
     Args:
+        (str) prompt - prompt to ask user for input
         (python dictionary) reference_dict - dictionary to reference user input with, asks for key
     Returns:
-        ret_val - value from dictionary
+        reference_dict[user_input] - value from dictionary
     """
 
-    while True:
-        userInput = input().strip().lower()
-        try:
-            ret_val = reference_dict[userInput]
-            break
-        except:
-            if userInput in ('exit', 'quit', 'q'):
-                quit("Bye")
-            print("Sorry, invalid input, (Try again/[Q]uit)")
+    try:
+        user_input = str(input(prompt+'\n')).lower()
 
-    return ret_val
+        while user_input not in reference_dict:
+            print('Sorry... it seems like you\'re not typing a correct entry. ')
+            print("Let's try again")
+            user_input = str(input(prompt+'\n')).lower()
+
+        print('Great! the chosen entry is: {}\n'.format(user_input))
+        return reference_dict[user_input]
+
+    except:
+        print('Seems like there is an issue with your input')
 
 
 def get_filters():
@@ -55,25 +58,23 @@ def get_filters():
 
     print('Hello! Let\'s explore some US bikeshare data!')
 
-    print("Would you like to see data for Chicago, New York, Washington?")
     # get user input for city (chicago, new york city, washington).
-    city = get_input(city_data)
+    city = get_input(
+        "Would you like to see data for Chicago, New York, Washington?", city_data)
 
-    print("Would you like to filter the data set? ([Y]es/[N]o/[Q]uit)?")
-    userInput = get_input(yes_no)
+    userInput = get_input(
+        "Would you like to filter the data set? ([Y]es/[N]o)?", yes_no)
     if not userInput:
         print('-'*40)
         return city, 99, 99
 
     # get user input for month (all, january, february, ... , june)
-    print(
-        "Would you like to see data for a specific month (january to june) or [a]ll data?")
-    month = get_input(months)
+    month = get_input(
+        "Would you like to see data for a specific month (january to june) or [a]ll data?", months)
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
-    print(
-        "Would you like to see data for a week day(monday to sunday) or [a]ll data?")
-    day = get_input(days)
+    day = get_input(
+        "Would you like to see data for a week day(monday to sunday) or [a]ll data?", days)
 
     print('-'*40)
     return city, month, day
@@ -266,9 +267,26 @@ def user_stats(df):
     print('-'*40)
 
 
-def get_data(df, index=0):
-    """Displays next 5 Rows from DataFrame from index-argument"""
-    print(df[index:index+5])
+def get_data(df):
+    """Asks for user input to see data. Displays 5 rows of data. 
+    
+    Args:
+        (pandas.DataFrame) df - Pandas DataFrame containing city data filtered by month and day
+    """
+
+    def print_data(index=0):
+        """Displays next 5 Rows from DataFrame from index-argument"""
+        print(df[index:index+5])
+
+    index = 0
+    while True:
+        userInput = get_input(
+            "Would you like to see five (more) rows of data? ([Y]es/[N]o)", yes_no)
+        if userInput:
+            print_data(index)
+            index += 5
+        else:
+            break
 
 
 def main():
@@ -284,20 +302,12 @@ def main():
         user_stats(df)
 
         # display rows from the data set
-        index = 0
-        while True:
-            print(
-                "Would you like to see five (more) rows of data? ([Y]es/[N]o/[Q]uit)")
-            userInput = get_input(yes_no)
-            if userInput:
-                get_data(df, index)
-                index += 5
-            else:
-                break
+        pd.set_option("display.max_columns", 200)
+        get_data(df)
 
         # restart
-        print("Would you like to restart ([Y]es/[N]o/[Q]uit)?")
-        userInput = get_input(yes_no)
+        userInput = get_input(
+            "Would you like to restart ([Y]es/[N]o)?", yes_no)
         if userInput:
             continue
         else:
