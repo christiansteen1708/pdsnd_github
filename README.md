@@ -1,17 +1,26 @@
->**Note**: Please **fork** the current Udacity repository so that you will have a **remote** repository in **your** Github account. Clone the remote repository to your local machine. Later, as a part of the project "Post your Work on Github", you will push your proposed changes to the remote repository in your Github account.
-
 ### Date created
-Include the date you created this project and README file.
+07.06.2023 
 
 ### Project Title
-Replace the Project Title
+Explore US Bikeshare Data 
 
 ### Description
-Describe what your project is about and what it does
+this project explores US Bikeshare data.
+It takes raw user input for specific filters for locations and times to then display calculated statistical and raw data.
+
+This repo is a fork of udacity/pdsnd_github. It is a mandatory project to be submitted for the udacity 'Programming for Data Science with Python' course. 
 
 ### Files used
-Include the files used
+bikeshare-data needs to be provided. 
+header-columns for the files need to be like this:
+
+    ,Start Time,End Time,Trip Duration,Start Station,End Station,User Type
+
+files need to be in project-root: 
+
+- chicago.csv
+- new_york_city.csv
+- washington.csv
 
 ### Credits
-It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
-
+This repo is a fork of udacity/pdsnd_github 
