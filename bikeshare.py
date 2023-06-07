@@ -267,9 +267,26 @@ def user_stats(df):
     print('-'*40)
 
 
-def get_data(df, index=0):
-    """Displays next 5 Rows from DataFrame from index-argument"""
-    print(df[index:index+5])
+def get_data(df):
+    """Asks for user input to see data. Displays 5 rows of data. 
+    
+    Args:
+        (pandas.DataFrame) df - Pandas DataFrame containing city data filtered by month and day
+    """
+
+    def print_data(index=0):
+        """Displays next 5 Rows from DataFrame from index-argument"""
+        print(df[index:index+5])
+
+    index = 0
+    while True:
+        userInput = get_input(
+            "Would you like to see five (more) rows of data? ([Y]es/[N]o)", yes_no)
+        if userInput:
+            print_data(index)
+            index += 5
+        else:
+            break
 
 
 def main():
@@ -286,16 +303,7 @@ def main():
 
         # display rows from the data set
         pd.set_option("display.max_columns", 200)
-
-        index = 0
-        while True:
-            userInput = get_input(
-                "Would you like to see five (more) rows of data? ([Y]es/[N]o)", yes_no)
-            if userInput:
-                get_data(df, index)
-                index += 5
-            else:
-                break
+        get_data(df)
 
         # restart
         userInput = get_input(
