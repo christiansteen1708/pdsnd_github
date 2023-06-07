@@ -285,6 +285,8 @@ def main():
         user_stats(df)
 
         # display rows from the data set
+        pd.set_option("display.max_columns", 200)
+
         index = 0
         while True:
             userInput = get_input(
